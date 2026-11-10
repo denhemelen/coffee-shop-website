@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
   <script defer src="js/site.js"></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 <body data-page="contacts">
 <main>
@@ -23,13 +24,13 @@
   <section style="padding-top:0">
     <div class="wrap contact-grid">
       <ul class="info-list reveal">
-        <li><span>Адреса</span><div>вул. Хрещатик, 15, Київ</div></li>
-        <li><span>Телефон</span><a href="tel:+380441234567">+38 (044) 123-45-67</a></li>
-        <li><span>Пошта</span><a href="mailto:hello@zerno.cafe">hello@zerno.cafe</a></li>
+        <li><span>Адреса</span><div id="c-address">вул. Хрещатик, 15, Київ</div></li>
+        <li><span>Телефон</span><a id="c-phone" href="tel:+380441234567">+38 (044) 123-45-67</a></li>
+        <li><span>Пошта</span><a id="c-mail" href="mailto:hello@zerno.cafe">hello@zerno.cafe</a></li>
         <li>
           <span>Години</span>
           <div>
-            <div class="hours"><span>Пн – Пт</span><span>08:00 – 21:00</span><span>Сб – Нд</span><span>09:00 – 22:00</span></div>
+            <div class="hours"><span>Пн – Пт</span><span id="h-week">08:00 – 21:00</span><span>Сб – Нд</span><span id="h-weekend">09:00 – 22:00</span></div>
             <span class="open-now" id="open-status">…</span>
           </div>
         </li>

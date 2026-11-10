@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
   <script defer src="js/site.js"></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 <body data-page="order">
 <main>
@@ -17,7 +18,7 @@
     <div class="wrap">
       <span class="eyebrow reveal">Замовлення</span>
       <h1 class="display split">Ваш <em>список</em> покупок</h1>
-      <p class="lead reveal" style="--d:.4s">Додайте позиції вручну або з <a href="menu.html" style="color:var(--accent)">меню</a> — список збережеться.</p>
+      <p class="lead reveal" style="--d:.4s">Додайте позиції вручну або з <a href="menu.html" style="color:var(--accent)">меню</a> — список збережеться. Увійдіть в акаунт, щоб він був доступний на будь-якому пристрої.</p>
     </div>
   </header>
 
@@ -50,7 +51,17 @@
           <span>Позицій: <b id="item-count">0</b></span>
           <span>Разом: <b id="total-price">0</b> грн</span>
         </div>
-        <button class="btn btn--ghost" id="clear-order" type="button" style="margin-top:1rem">Очистити</button>
+        <div class="checkout">
+          <div class="field">
+            <textarea id="order-note" placeholder=" " maxlength="300"></textarea>
+            <label for="order-note">Коментар до замовлення (необов’язково)</label>
+          </div>
+          <div class="checkout-actions">
+            <button class="btn" id="checkout" type="button">Оформити замовлення <span class="arrow">→</span></button>
+            <button class="btn btn--ghost" id="clear-order" type="button">Очистити</button>
+          </div>
+          <p class="muted small" id="checkout-hint"></p>
+        </div>
       </div>
     </div>
   </section>

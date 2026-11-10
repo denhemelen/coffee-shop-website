@@ -21,11 +21,15 @@
     .join('');
 
   document.body.insertAdjacentHTML('afterbegin', `
+    <div class="announce" id="announce" hidden></div>
     <header class="site-header">
       <nav class="nav wrap" aria-label="Головна навігація">
         <a class="logo" href="index.html"><span class="logo-dot"></span>Зерно</a>
         <ul class="nav-links" id="nav-links">${navItems}</ul>
-        <button class="burger" aria-label="Меню" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+        <div class="nav-actions">
+          <div class="account" id="account-slot"></div>
+          <button class="burger" aria-label="Меню" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
+        </div>
       </nav>
     </header>`);
 
@@ -64,7 +68,7 @@
     toastEl.textContent = msg;
     toastEl.classList.add('is-shown');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('is-shown'), 2600);
+    toastTimer = setTimeout(() => toastEl.classList.remove('is-shown'), 2800);
   };
 
   /* ---------- Розбивка заголовків на слова ---------- */
@@ -84,9 +88,7 @@
             frag.append(w);
           });
           child.replaceWith(frag);
-        } else if (child.nodeName === 'BR') {
-          /* залишаємо перенос */
-        } else {
+        } else if (child.nodeName !== 'BR') {
           walk(child);
         }
       });
@@ -118,67 +120,66 @@
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-  $$('.reveal, .reveal-img, .split, [data-count]').forEach((el) => io.observe(el));
+  // Спостерігати за новими елементами (у т. ч. доданими динамічно)
+  const observe = (root = document) =>
+    $$('.reveal:not(.is-in), .reveal-img:not(.is-in), .split:not(.is-in), [data-count]', root).forEach((el) => io.observe(el));
+  observe();
 
   /* ---------- Біжучий рядок: дублюємо стрічку ---------- */
   $$('.marquee').forEach((m) => {
-    const track = $('.marquee-track', m);
-    const clone = track.cloneNode(true);
+    const clone = $('.marquee-track', m).cloneNode(true);
     clone.setAttribute('aria-hidden', 'true');
     m.append(clone);
   });
 
-  /* ---------- Ефекти для миші ---------- */
+  /* ---------- Ефекти для миші (делегування — працює й для нових елементів) ---------- */
   if (finePointer && !reduceMotion) {
-    // Курсор, що слідує
     const cursor = $('.cursor');
     let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
-    addEventListener('mousemove', (e) => { x = e.clientX; y = e.clientY; cursor.classList.add('is-active'); });
+    let curBtn = null, curCard = null;
+
+    addEventListener('mousemove', (e) => {
+      x = e.clientX; y = e.clientY;
+      cursor.classList.add('is-active');
+
+      // Магнітні кнопки
+      const btn = e.target.closest('.btn');
+      if (curBtn && curBtn !== btn) curBtn.style.transform = '';
+      curBtn = btn;
+      if (btn) {
+        const r = btn.getBoundingClientRect();
+        btn.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px, ${(e.clientY - r.top - r.height / 2) * 0.35}px)`;
+      }
+
+      // 3D-нахил карток
+      const card = e.target.closest('.card');
+      if (curCard && curCard !== card) curCard.style.transform = '';
+      curCard = card;
+      if (card) {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg) translateY(-6px)`;
+      }
+
+      // Паралакс
+      const mx = e.clientX / innerWidth - 0.5;
+      const my = e.clientY / innerHeight - 0.5;
+      $$('[data-parallax]').forEach((el) => {
+        const k = +el.dataset.parallax;
+        el.style.transform = `translate(${mx * k}px, ${my * k}px)`;
+      });
+    });
     document.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
+    document.addEventListener('mouseover', (e) => {
+      cursor.classList.toggle('is-hover', !!e.target.closest('a, button, .card, select, label'));
+    });
     const loop = () => {
       cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
       cursor.style.transform = `translate(${cx}px, ${cy}px)`;
       requestAnimationFrame(loop);
     };
     loop();
-    document.addEventListener('mouseover', (e) => {
-      cursor.classList.toggle('is-hover', !!e.target.closest('a, button, .card, select, label'));
-    });
-
-    // Магнітні кнопки
-    $$('.btn').forEach((btn) => {
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2);
-        const dy = e.clientY - (r.top + r.height / 2);
-        btn.style.transform = `translate(${dx * 0.25}px, ${dy * 0.35}px)`;
-      });
-      btn.addEventListener('mouseleave', () => (btn.style.transform = ''));
-    });
-
-    // 3D-нахил карток
-    $$('.card').forEach((card) => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg) translateY(-6px)`;
-      });
-      card.addEventListener('mouseleave', () => (card.style.transform = ''));
-    });
-
-    // Легкий паралакс для елементів з data-parallax
-    const par = $$('[data-parallax]');
-    if (par.length) {
-      addEventListener('mousemove', (e) => {
-        const mx = e.clientX / innerWidth - 0.5;
-        const my = e.clientY / innerHeight - 0.5;
-        par.forEach((el) => {
-          const k = +el.dataset.parallax;
-          el.style.transform = `translate(${mx * k}px, ${my * k}px)`;
-        });
-      });
-    }
   }
 
   /* ---------- Перехід між сторінками (фолбек без View Transitions) ---------- */
@@ -187,9 +188,9 @@
     const curtain = $('.curtain');
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href]');
-      if (!a || a.target || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (!a || a.target || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
       const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin || url.pathname === location.pathname || !url.pathname.endsWith('.html')) return;
+      if (url.origin !== location.origin || url.pathname === location.pathname || url.hash) return;
       e.preventDefault();
       curtain.classList.add('is-leaving');
       setTimeout(() => (location.href = a.href), 420);
@@ -197,33 +198,49 @@
     addEventListener('pageshow', () => curtain.classList.remove('is-leaving'));
   }
 
-  /* ---------- Кошик (спільний для меню та замовлення) ---------- */
+  /* ---------- Кошик ----------
+     Зберігається в localStorage. Якщо користувач увійшов, js/app.js
+     синхронізує його з Firestore (подія zerno:cart). */
   const STORE = 'zerno-order';
   const cart = {
     get() { try { return JSON.parse(localStorage.getItem(STORE)) || []; } catch { return []; } },
-    set(items) { try { localStorage.setItem(STORE, JSON.stringify(items)); } catch { /* приватний режим */ } },
+    set(items, { silent = false } = {}) {
+      try { localStorage.setItem(STORE, JSON.stringify(items)); } catch { /* приватний режим */ }
+      if (!silent) dispatchEvent(new CustomEvent('zerno:cart', { detail: items }));
+      else dispatchEvent(new CustomEvent('zerno:cart-sync', { detail: items }));
+    },
     add(item) { const items = cart.get(); items.push(item); cart.set(items); },
   };
 
+  /* ---------- Зображення товару: шлях / URL / data-URL або емодзі ---------- */
+  const isEmoji = (s) => !!s && s.length <= 8 && !/[\/.:]/.test(s);
+  const thumbHTML = (src) => (isEmoji(src) ? `<span class="emoji">${src}</span>` : '<img alt="" loading="lazy">');
+  const fillThumb = (el, src) => {
+    el.innerHTML = src ? thumbHTML(src) : '<span class="emoji">☕</span>';
+    const img = el.querySelector('img');
+    if (img) img.src = src;
+  };
+
   /* ---------- Сторінка «Меню»: фільтри ---------- */
+  let applyFilter = () => {};
   if (page === 'menu') {
     const tabs = $$('.tab');
     const pill = $('.tab-pill');
-    const items = $$('.menu-item');
 
     const movePill = (tab) => {
+      if (!tab) return;
       pill.style.left = tab.offsetLeft + 'px';
       pill.style.top = tab.offsetTop + 'px';
       pill.style.width = tab.offsetWidth + 'px';
       pill.style.height = tab.offsetHeight + 'px';
     };
 
-    const select = (tab) => {
-      tabs.forEach((t) => t.setAttribute('aria-selected', t === tab));
+    applyFilter = () => {
+      const tab = $('.tab[aria-selected="true"]');
       movePill(tab);
-      const f = tab.dataset.filter;
+      const f = tab ? tab.dataset.filter : 'all';
       let n = 0;
-      items.forEach((it) => {
+      $$('.menu-item').forEach((it) => {
         const show = f === 'all' || it.dataset.cat === f;
         it.classList.toggle('is-hidden', !show);
         if (show) {
@@ -232,19 +249,30 @@
           setTimeout(() => requestAnimationFrame(() => it.classList.remove('is-entering')), delay + 20);
         }
       });
+      const empty = $('#menu-empty');
+      if (empty) empty.hidden = n > 0;
     };
 
-    tabs.forEach((t) => t.addEventListener('click', () => select(t)));
+    tabs.forEach((t) => t.addEventListener('click', () => {
+      tabs.forEach((x) => x.setAttribute('aria-selected', x === t));
+      applyFilter();
+    }));
     addEventListener('resize', () => movePill($('.tab[aria-selected="true"]')));
     document.fonts.ready.then(() => movePill($('.tab[aria-selected="true"]')));
     movePill(tabs[0]);
 
-    $$('.menu-item .add').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const it = btn.closest('.menu-item');
-        cart.add({ name: it.dataset.name, price: +it.dataset.price, image: it.dataset.img });
-        toast(`«${it.dataset.name}» додано до замовлення ☕`);
+    // Делегування: працює і для товарів, завантажених із Firestore
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.menu-item .add');
+      if (!btn) return;
+      const it = btn.closest('.menu-item');
+      cart.add({
+        pid: it.dataset.pid || null,
+        name: it.dataset.name,
+        price: +it.dataset.price,
+        image: it.dataset.thumb || it.dataset.img || '',
       });
+      toast(`«${it.dataset.name}» додано до замовлення ☕`);
     });
   }
 
@@ -254,11 +282,11 @@
     const list = $('#order-list');
     const countEl = $('#item-count');
     const totalEl = $('#total-price');
-    let items = cart.get();
 
     const bump = (el) => { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); };
 
     const render = () => {
+      const items = cart.get();
       list.innerHTML = '';
       if (!items.length) {
         list.innerHTML = '<div class="order-empty"><span class="cup">☕</span>Поки що порожньо — додайте щось смачне.</div>';
@@ -267,61 +295,77 @@
         const row = document.createElement('div');
         row.className = 'order-item';
         row.innerHTML = `
-          <img alt="">
+          <div class="order-thumb"></div>
           <h4></h4>
-          <span class="price">${item.price} грн</span>
+          <span class="price"></span>
           <button class="remove" aria-label="Видалити">✕</button>`;
-        row.querySelector('img').src = item.image;
+        fillThumb(row.querySelector('.order-thumb'), item.image);
         row.querySelector('h4').textContent = item.name;
+        row.querySelector('.price').textContent = `${item.price} грн`;
         row.querySelector('.remove').addEventListener('click', () => {
           row.classList.add('is-removing');
-          setTimeout(() => { items.splice(index, 1); save(); }, reduceMotion ? 0 : 420);
+          setTimeout(() => {
+            const next = cart.get();
+            next.splice(index, 1);
+            cart.set(next);
+            render();
+          }, reduceMotion ? 0 : 420);
         });
         list.append(row);
       });
       countEl.textContent = items.length;
-      totalEl.textContent = items.reduce((s, i) => s + i.price, 0);
+      totalEl.textContent = items.reduce((s, i) => s + (+i.price || 0), 0);
       bump(countEl); bump(totalEl);
+      dispatchEvent(new CustomEvent('zerno:order-render', { detail: items }));
     };
-
-    const save = () => { cart.set(items); render(); };
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = $('#item-name').value.trim();
       const price = parseFloat($('#item-price').value);
       if (!name || !(price >= 0)) return;
-      items.push({ name, price, image: $('#item-image').value });
-      save();
+      cart.add({ pid: null, name, price, image: $('#item-image').value });
+      render();
       form.reset();
       $('#item-name').focus();
     });
 
     $('#clear-order').addEventListener('click', () => {
-      if (!items.length) return;
-      items = [];
-      save();
+      if (!cart.get().length) return;
+      cart.set([]);
+      render();
       toast('Замовлення очищено');
     });
 
+    // Кошик оновився ззовні (вхід в акаунт, інший пристрій)
+    addEventListener('zerno:cart-sync', render);
     render();
   }
 
-  /* ---------- Сторінка «Контакти» ---------- */
-  if (page === 'contacts') {
+  /* ---------- Години роботи: «відчинено / зачинено» ---------- */
+  const hours = { week: ['08:00', '21:00'], weekend: ['09:00', '22:00'] };
+  const toH = (s) => { const [h, m] = String(s).split(':').map(Number); return (h || 0) + (m || 0) / 60; };
+  const updateOpenStatus = (h = hours) => {
     const status = $('#open-status');
+    if (!status) return;
     const now = new Date();
-    const h = now.getHours() + now.getMinutes() / 60;
+    const cur = now.getHours() + now.getMinutes() / 60;
     const weekend = now.getDay() === 0 || now.getDay() === 6;
-    const [from, to] = weekend ? [9, 22] : [8, 21];
-    const open = h >= from && h < to;
-    status.textContent = open ? `Зараз відчинено · до ${to}:00` : 'Зараз зачинено';
-    if (!open) status.style.setProperty('--c', '#b23a2b');
+    const [from, to] = weekend ? h.weekend : h.week;
+    const open = cur >= toH(from) && cur < toH(to);
+    status.textContent = open ? `Зараз відчинено · до ${to}` : 'Зараз зачинено';
+    status.style.setProperty('--c', open ? '#3a9a5b' : '#b23a2b');
+  };
 
+  if (page === 'contacts') {
+    updateOpenStatus();
     $('#contact-form').addEventListener('submit', (e) => {
       e.preventDefault();
       e.target.reset();
       toast('Дякуємо! Ми відповімо найближчим часом.');
     });
   }
+
+  /* ---------- API для js/app.js (Firebase) ---------- */
+  window.Zerno = { $, $$, page, reduceMotion, toast, cart, observe, applyFilter, updateOpenStatus, isEmoji, fillThumb };
 })();
