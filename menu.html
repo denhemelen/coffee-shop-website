@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
   <script defer src="js/site.js"></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 <body data-page="menu">
 <main>
@@ -31,7 +32,7 @@
         <button class="tab" role="tab" aria-selected="false" data-filter="sweet">Десерти</button>
       </div>
 
-      <div class="menu-grid reveal">
+      <div class="menu-grid reveal" id="menu-grid">
         <div class="menu-item" data-cat="classic" data-name="Еспресо" data-price="45" data-img="foto/папка для файла index.html/еспрессо.jpg">
           <div class="thumb"><img src="foto/папка для файла index.html/еспрессо.jpg" alt="" loading="lazy"></div>
           <div><h3>Еспресо</h3><p>30 мл · какао, карамель</p></div>
@@ -83,6 +84,7 @@
           <div><span class="price">70 грн</span><button class="add" aria-label="Додати Брауні">+</button></div>
         </div>
       </div>
+      <p class="order-empty" id="menu-empty" hidden>У цій категорії поки нічого немає.</p>
     </div>
   </section>
 </main>
