@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Замовлення — Зерно</title>
+  <meta name="description" content="Зберіть своє замовлення в кав'ярні «Зерно».">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script defer src="js/site.js"></script>
+</head>
+<body data-page="order">
+<main>
+  <header class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow reveal">Замовлення</span>
+      <h1 class="display split">Ваш <em>список</em> покупок</h1>
+      <p class="lead reveal" style="--d:.4s">Додайте позиції вручну або з <a href="menu.html" style="color:var(--accent)">меню</a> — список збережеться.</p>
+    </div>
+  </header>
+
+  <section style="padding-top:0">
+    <div class="wrap order-grid">
+      <form class="panel reveal" id="order-form" autocomplete="off">
+        <h2>Нова позиція</h2>
+        <div class="field">
+          <input type="text" id="item-name" placeholder=" " required>
+          <label for="item-name">Назва покупки</label>
+        </div>
+        <div class="field">
+          <input type="number" id="item-price" placeholder=" " min="0" step="1" required>
+          <label for="item-price">Вартість, грн</label>
+        </div>
+        <div class="field">
+          <select id="item-image">
+            <option value="foto/папка для файла index.html/еспрессо.jpg">Еспресо</option>
+            <option value="foto/папка для файла index.html/латте.jpg">Лате</option>
+            <option value="foto/папка для файла index.html/капучіно.jpg">Капучино</option>
+          </select>
+          <label for="item-image">Зображення</label>
+        </div>
+        <button class="btn" type="submit">Додати <span class="arrow">→</span></button>
+      </form>
+
+      <div class="reveal" style="--d:.15s">
+        <div class="order-list" id="order-list" aria-live="polite"></div>
+        <div class="order-summary">
+          <span>Позицій: <b id="item-count">0</b></span>
+          <span>Разом: <b id="total-price">0</b> грн</span>
+        </div>
+        <button class="btn btn--ghost" id="clear-order" type="button" style="margin-top:1rem">Очистити</button>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

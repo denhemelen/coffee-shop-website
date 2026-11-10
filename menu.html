@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Меню — Зерно</title>
+  <meta name="description" content="Меню кав'ярні «Зерно»: класична кава, альтернатива та десерти.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script defer src="js/site.js"></script>
+</head>
+<body data-page="menu">
+<main>
+  <header class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow reveal">Меню</span>
+      <h1 class="display split">Обирайте <em>свою</em> чашку</h1>
+      <p class="lead reveal" style="--d:.4s">Натисніть «+», щоб додати позицію до замовлення.</p>
+    </div>
+  </header>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="tabs reveal" role="tablist" aria-label="Категорії меню">
+        <span class="tab-pill" aria-hidden="true"></span>
+        <button class="tab" role="tab" aria-selected="true" data-filter="all">Усе</button>
+        <button class="tab" role="tab" aria-selected="false" data-filter="classic">Класика</button>
+        <button class="tab" role="tab" aria-selected="false" data-filter="alt">Альтернатива</button>
+        <button class="tab" role="tab" aria-selected="false" data-filter="sweet">Десерти</button>
+      </div>
+
+      <div class="menu-grid reveal">
+        <div class="menu-item" data-cat="classic" data-name="Еспресо" data-price="45" data-img="foto/папка для файла index.html/еспрессо.jpg">
+          <div class="thumb"><img src="foto/папка для файла index.html/еспрессо.jpg" alt="" loading="lazy"></div>
+          <div><h3>Еспресо</h3><p>30 мл · какао, карамель</p></div>
+          <div><span class="price">45 грн</span><button class="add" aria-label="Додати Еспресо">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="classic" data-name="Капучино" data-price="65" data-img="foto/папка для файла index.html/капучіно.jpg">
+          <div class="thumb"><img src="foto/папка для файла index.html/капучіно.jpg" alt="" loading="lazy"></div>
+          <div><h3>Капучино</h3><p>250 мл · оксамитова піна</p></div>
+          <div><span class="price">65 грн</span><button class="add" aria-label="Додати Капучино">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="classic" data-name="Лате" data-price="70" data-img="foto/папка для файла index.html/латте.jpg">
+          <div class="thumb"><img src="foto/папка для файла index.html/латте.jpg" alt="" loading="lazy"></div>
+          <div><h3>Лате</h3><p>350 мл · м'який і вершковий</p></div>
+          <div><span class="price">70 грн</span><button class="add" aria-label="Додати Лате">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="classic" data-name="Флет вайт" data-price="75" data-img="foto/кава до файла lesson.html/coffee-brain-caffeine-neuroscincces.webp">
+          <div class="thumb"><img src="foto/кава до файла lesson.html/coffee-brain-caffeine-neuroscincces.webp" alt="" loading="lazy"></div>
+          <div><h3>Флет вайт</h3><p>200 мл · подвійний ристрето</p></div>
+          <div><span class="price">75 грн</span><button class="add" aria-label="Додати Флет вайт">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="alt" data-name="Пуровер V60" data-price="85" data-img="foto/кава до файла lesson.html/кафа.jpg">
+          <div class="thumb"><img src="foto/кава до файла lesson.html/кафа.jpg" alt="" loading="lazy"></div>
+          <div><h3>Пуровер V60</h3><p>Ефіопія · ягоди, жасмин</p></div>
+          <div><span class="price">85 грн</span><button class="add" aria-label="Додати Пуровер V60">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="alt" data-name="Колд брю" data-price="80" data-img="foto/папка для файла index.html/латте норм.jpg">
+          <div class="thumb"><img src="foto/папка для файла index.html/латте норм.jpg" alt="" loading="lazy"></div>
+          <div><h3>Колд брю</h3><p>18 годин настоювання</p></div>
+          <div><span class="price">80 грн</span><button class="add" aria-label="Додати Колд брю">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="alt" data-name="Раф лаванда" data-price="90" data-img="foto/кава до файла lesson.html/Everything_you_need_to_know_about_decaf_coffee.webp">
+          <div class="thumb"><img src="foto/кава до файла lesson.html/Everything_you_need_to_know_about_decaf_coffee.webp" alt="" loading="lazy"></div>
+          <div><h3>Раф лаванда</h3><p>Вершки, ваніль, лаванда</p></div>
+          <div><span class="price">90 грн</span><button class="add" aria-label="Додати Раф лаванда">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="sweet" data-name="Чізкейк" data-price="95" data-img="foto/папка для файла index.html/фон.webp">
+          <div class="thumb">🍰</div>
+          <div><h3>Чізкейк Нью-Йорк</h3><p>Ягідний соус</p></div>
+          <div><span class="price">95 грн</span><button class="add" aria-label="Додати Чізкейк">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="sweet" data-name="Круасан" data-price="55" data-img="foto/папка для файла index.html/фон.webp">
+          <div class="thumb">🥐</div>
+          <div><h3>Круасан</h3><p>Вершкове масло, щоранку</p></div>
+          <div><span class="price">55 грн</span><button class="add" aria-label="Додати Круасан">+</button></div>
+        </div>
+        <div class="menu-item" data-cat="sweet" data-name="Брауні" data-price="70" data-img="foto/папка для файла index.html/фон.webp">
+          <div class="thumb">🍫</div>
+          <div><h3>Брауні</h3><p>Темний шоколад, горіхи</p></div>
+          <div><span class="price">70 грн</span><button class="add" aria-label="Додати Брауні">+</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

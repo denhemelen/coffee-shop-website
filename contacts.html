@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Контакти — Зерно</title>
+  <meta name="description" content="Адреса, години роботи та контакти кав'ярні «Зерно».">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script defer src="js/site.js"></script>
+</head>
+<body data-page="contacts">
+<main>
+  <header class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow reveal">Контакти</span>
+      <h1 class="display split">Скажіть <em>привіт</em></h1>
+    </div>
+  </header>
+
+  <section style="padding-top:0">
+    <div class="wrap contact-grid">
+      <ul class="info-list reveal">
+        <li><span>Адреса</span><div>вул. Хрещатик, 15, Київ</div></li>
+        <li><span>Телефон</span><a href="tel:+380441234567">+38 (044) 123-45-67</a></li>
+        <li><span>Пошта</span><a href="mailto:hello@zerno.cafe">hello@zerno.cafe</a></li>
+        <li>
+          <span>Години</span>
+          <div>
+            <div class="hours"><span>Пн – Пт</span><span>08:00 – 21:00</span><span>Сб – Нд</span><span>09:00 – 22:00</span></div>
+            <span class="open-now" id="open-status">…</span>
+          </div>
+        </li>
+      </ul>
+
+      <form class="panel reveal" id="contact-form" style="--d:.15s">
+        <h2>Напишіть нам</h2>
+        <div class="field">
+          <input type="text" id="c-name" placeholder=" " required>
+          <label for="c-name">Ім'я</label>
+        </div>
+        <div class="field">
+          <input type="email" id="c-email" placeholder=" " required>
+          <label for="c-email">Email</label>
+        </div>
+        <div class="field">
+          <textarea id="c-msg" placeholder=" " required></textarea>
+          <label for="c-msg">Повідомлення</label>
+        </div>
+        <button class="btn" type="submit">Надіслати <span class="arrow">→</span></button>
+      </form>
+    </div>
+  </section>
+</main>
+</body>
+</html>
