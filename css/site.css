@@ -597,3 +597,12 @@ section { padding: clamp(4rem, 10vw, 8rem) 0; }
   .two { grid-template-columns: 1fr; }
   .modal { padding: 1.8rem 1.2rem 1.4rem; }
 }
+
+/* ---------- Перемикач мови ---------- */
+.lang-switch {
+  margin-left: 1.6rem; padding: .35rem .75rem; border-radius: 999px; border: 1px solid var(--line);
+  background: none; cursor: pointer; font-size: .8rem; font-weight: 500; letter-spacing: .08em;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.lang-switch:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+@media (max-width: 760px) { .lang-switch { margin-left: auto; margin-right: .4rem; position: relative; z-index: 2; } }
